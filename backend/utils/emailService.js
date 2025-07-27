@@ -2,11 +2,24 @@ const nodemailer = require('nodemailer');
 
 // Create transporter for sending emails
 const createTransporter = () => {
+  // Debug environment variables
+  console.log('Email configuration check:', {
+    EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Missing',
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Set' : 'Missing',
+    SMTP_HOST: process.env.SMTP_HOST || 'smtp.gmail.com',
+    SMTP_PORT: process.env.SMTP_PORT || 587
+  });
+
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT) || 587,
+    secure: false, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD
+    },
+    tls: {
+      rejectUnauthorized: false // Allow self-signed certificates in development
     }
   });
 };
@@ -322,20 +335,41 @@ const createWelcomeEmailTemplate = (userName) => {
 // Send welcome email
 const sendWelcomeEmail = async (userEmail, userName) => {
   try {
+    // Check if email configuration is available
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      console.warn('Email configuration missing. Skipping welcome email.');
+      return { success: false, error: 'Email configuration missing' };
+    }
+
     const transporter = createTransporter();
-    
+
+    // Verify transporter configuration
+    await transporter.verify();
+    console.log('SMTP connection verified successfully');
+
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'noreply@shikshahub.com',
+      from: `"ShikshaHub" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: 'Welcome to ShikshaHub! 🚀',
       html: createWelcomeEmailTemplate(userName)
     };
 
+    console.log('Attempting to send welcome email to:', userEmail);
     const info = await transporter.sendMail(mailOptions);
-    console.log('Welcome email sent successfully:', info.messageId);
+    console.log('Welcome email sent successfully:', {
+      messageId: info.messageId,
+      to: userEmail,
+      accepted: info.accepted,
+      rejected: info.rejected
+    });
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Error sending welcome email:', error);
+    console.error('Error sending welcome email:', {
+      error: error.message,
+      code: error.code,
+      command: error.command,
+      to: userEmail
+    });
     return { success: false, error: error.message };
   }
 };
@@ -371,18 +405,41 @@ const createResetPasswordEmailTemplate = (resetUrl) => {
 
 const sendResetPasswordEmail = async (userEmail, resetUrl) => {
   try {
+    // Check if email configuration is available
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      console.warn('Email configuration missing. Skipping password reset email.');
+      return { success: false, error: 'Email configuration missing' };
+    }
+
     const transporter = createTransporter();
+
+    // Verify transporter configuration
+    await transporter.verify();
+    console.log('SMTP connection verified for password reset email');
+
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'noreply@shikshahub.com',
+      from: `"ShikshaHub" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: 'Reset Your Password - ShikshaHub',
       html: createResetPasswordEmailTemplate(resetUrl)
     };
+
+    console.log('Attempting to send password reset email to:', userEmail);
     const info = await transporter.sendMail(mailOptions);
-    console.log('Password reset email sent successfully:', info.messageId);
+    console.log('Password reset email sent successfully:', {
+      messageId: info.messageId,
+      to: userEmail,
+      accepted: info.accepted,
+      rejected: info.rejected
+    });
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Error sending password reset email:', error);
+    console.error('Error sending password reset email:', {
+      error: error.message,
+      code: error.code,
+      command: error.command,
+      to: userEmail
+    });
     return { success: false, error: error.message };
   }
 };

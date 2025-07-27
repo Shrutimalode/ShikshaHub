@@ -39,25 +39,49 @@ router.post('/reset-password', resetPassword);
 // @access  Private
 router.put('/email-preferences', auth, updateEmailPreferences);
 
-// Test email endpoint (for development only)
+// Test email endpoint (for development and debugging)
 router.post('/test-email', async (req, res) => {
   try {
     const { email, name } = req.body;
-    
+
     if (!email || !name) {
       return res.status(400).json({ message: 'Email and name are required' });
     }
 
+    // Check environment variables
+    const envCheck = {
+      EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Missing',
+      EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Set' : 'Missing',
+      NODE_ENV: process.env.NODE_ENV || 'development'
+    };
+
+    console.log('Environment check for test email:', envCheck);
+
     const result = await sendWelcomeEmail(email, name);
-    
+
     if (result.success) {
-      res.json({ message: 'Test email sent successfully', messageId: result.messageId });
+      res.json({
+        message: 'Test email sent successfully',
+        messageId: result.messageId,
+        environment: envCheck
+      });
     } else {
-      res.status(500).json({ message: 'Failed to send test email', error: result.error });
+      res.status(500).json({
+        message: 'Failed to send test email',
+        error: result.error,
+        environment: envCheck
+      });
     }
   } catch (error) {
     console.error('Test email error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+      environment: {
+        EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Missing',
+        EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Set' : 'Missing'
+      }
+    });
   }
 });
 
