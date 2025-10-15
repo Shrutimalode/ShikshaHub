@@ -4,6 +4,7 @@ import { Container, Button, Spinner, Alert } from 'react-bootstrap';
 import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import BlogDetail from '../components/BlogDetail';
+import DiscussionForum from '../components/DiscussionForum';
 
 const BlogView = () => {
   const { communityId, blogId } = useParams();
@@ -159,6 +160,12 @@ const BlogView = () => {
         setReviewComment={setReviewComment}
         handleReviewSubmit={handleReviewSubmit}
         onResubmit={handleResubmit}
+      />
+      
+      {/* Discussion Forum */}
+      <DiscussionForum 
+        blogId={blogId}
+        blogStatus={blog.status}
       />
     </Container>
   );

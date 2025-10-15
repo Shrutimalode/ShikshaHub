@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const communityRoutes = require('./routes/communities');
 const materialRoutes = require('./routes/materials');
 const blogRoutes = require('./routes/blogs');
+const discussionRoutes = require('./routes/discussions');
 const chatRoutes = require('./routes/chatRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const path = require('path');
@@ -34,6 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/communities', communityRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/discussions', discussionRoutes);
 app.use('/api', chatRoutes);
 
 // Uploads directory

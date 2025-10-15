@@ -158,6 +158,11 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
     // Send password reset email
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+
+    // Debug logging to check what URL is being generated
+    console.log('FRONTEND_URL environment variable:', process.env.FRONTEND_URL);
+    console.log('Generated reset URL:', resetUrl);
+
     await sendResetPasswordEmail(user.email, resetUrl);
     return res.json({ message: 'If your email is registered, a reset link has been sent.' });
   } catch (error) {

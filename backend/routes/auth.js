@@ -39,6 +39,16 @@ router.post('/reset-password', resetPassword);
 // @access  Private
 router.put('/email-preferences', auth, updateEmailPreferences);
 
+// @route   GET api/auth/test-env
+// @desc    Test environment variables (temporary debug route)
+// @access  Public
+router.get('/test-env', (req, res) => {
+  res.json({
+    FRONTEND_URL: process.env.FRONTEND_URL || 'Not set',
+    NODE_ENV: process.env.NODE_ENV || 'Not set'
+  });
+});
+
 // Test email endpoint (for development and debugging)
 router.post('/test-email', async (req, res) => {
   try {
