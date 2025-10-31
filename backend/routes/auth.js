@@ -1,0 +1,98 @@
+const express = require('express');
+const router = express.Router();
+const { register, login, getMe, forgotEmail, forgotPassword, resetPassword, updateEmailPreferences } = require('../controllers/authController');
+const { sendWelcomeEmail } = require('../utils/emailService');
+const auth = require('../middleware/auth');
+
+// @route   POST api/auth/register
+// @desc    Register user
+// @access  Public
+router.post('/register', register);
+
+// @route   POST api/auth/login
+// @desc    Login user and get token
+// @access  Public
+router.post('/login', login);
+
+// @route   GET api/auth/me
+// @desc    Get current user profile
+// @access  Private
+router.get('/me', auth, getMe);
+
+// @route   POST api/auth/forgot-email
+// @desc    Retrieve email by name
+// @access  Public
+router.post('/forgot-email', forgotEmail);
+
+// @route   POST api/auth/forgot-password
+// @desc    Send password reset email
+// @access  Public
+router.post('/forgot-password', forgotPassword);
+
+// @route   POST api/auth/reset-password
+// @desc    Reset user password
+// @access  Public
+router.post('/reset-password', resetPassword);
+
+// @route   PUT api/auth/email-preferences
+// @desc    Update user email notification preferences
+// @access  Private
+router.put('/email-preferences', auth, updateEmailPreferences);
+
+// @route   GET api/auth/test-env
+// @desc    Test environment variables (temporary debug route)
+// @access  Public
+router.get('/test-env', (req, res) => {
+  res.json({
+    FRONTEND_URL: process.env.FRONTEND_URL || 'Not set',
+    NODE_ENV: process.env.NODE_ENV || 'Not set'
+  });
+});
+
+// Test email endpoint (for development and debugging)
+router.post('/test-email', async (req, res) => {
+  try {
+    const { email, name } = req.body;
+
+    if (!email || !name) {
+      return res.status(400).json({ message: 'Email and name are required' });
+    }
+
+    // Check environment variables
+    const envCheck = {
+      EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Missing',
+      EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Set' : 'Missing',
+      NODE_ENV: process.env.NODE_ENV || 'development'
+    };
+
+    console.log('Environment check for test email:', envCheck);
+
+    const result = await sendWelcomeEmail(email, name);
+
+    if (result.success) {
+      res.json({
+        message: 'Test email sent successfully',
+        messageId: result.messageId,
+        environment: envCheck
+      });
+    } else {
+      res.status(500).json({
+        message: 'Failed to send test email',
+        error: result.error,
+        environment: envCheck
+      });
+    }
+  } catch (error) {
+    console.error('Test email error:', error);
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+      environment: {
+        EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Missing',
+        EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Set' : 'Missing'
+      }
+    });
+  }
+});
+
+module.exports = router; 
