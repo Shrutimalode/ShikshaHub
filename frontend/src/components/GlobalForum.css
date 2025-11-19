@@ -1,0 +1,41 @@
+.global-forum-container {
+  padding: 20px;
+}
+
+.thread-list-sidebar {
+  position: sticky;
+  top: 80px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.thread-list-sidebar .list-group-item {
+  transition: all 0.2s ease;
+}
+
+.thread-list-sidebar .list-group-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.thread-list-sidebar .list-group-item.active {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+.discussions-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.nested-replies {
+  border-left: 2px solid #e9ecef;
+  padding-left: 10px;
+}
+
+.replies-section {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+}

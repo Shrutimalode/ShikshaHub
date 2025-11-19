@@ -1,0 +1,194 @@
+.community-forum {
+  padding: 20px;
+}
+
+.community-forum .card {
+  transition: box-shadow 0.3s ease;
+}
+
+.community-forum .card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.community-forum .border-warning {
+  border-width: 2px !important;
+  border-left-width: 5px !important;
+}
+
+.community-forum .ms-4 {
+  margin-left: 2rem !important;
+  border-left: 3px solid #e9ecef;
+}
+
+.community-forum .badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.community-forum .btn-link {
+  text-decoration: none;
+  color: #6c757d;
+}
+
+.community-forum .btn-link:hover {
+  color: #007bff;
+}
+
+/* Action button styling */
+.community-forum .btn-outline-secondary {
+  border-color: #dee2e6;
+  color: #495057;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.community-forum .btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.community-forum .btn-outline-warning:hover {
+  background-color: #fff3cd;
+}
+
+.community-forum .btn-outline-success:hover {
+  background-color: #d4edda;
+}
+
+.community-forum .btn-outline-danger:hover {
+  background-color: #f8d7da;
+}
+
+/* Like button active state */
+.community-forum .btn-outline-secondary .text-danger {
+  color: #dc3545 !important;
+}
+
+.community-forum .text-muted {
+  font-size: 0.875rem;
+}
+
+.community-forum .gap-3 {
+  gap: 1rem !important;
+}
+
+.community-forum .gap-2 {
+  gap: 0.5rem !important;
+}
+
+/* Button group spacing */
+.community-forum .d-flex.gap-2 > button {
+  margin-right: 0;
+}
+
+/* Material reference styling */
+.community-forum .material-reference {
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+}
+
+.community-forum .material-reference a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.community-forum .material-reference a:hover {
+  text-decoration: underline;
+}
+
+/* Stats bar */
+.community-forum .stats-bar h4 {
+  margin: 0;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.community-forum .stats-bar small {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Reply thread indentation */
+.community-forum .reply-thread {
+  border-left: 2px solid #dee2e6;
+  padding-left: 1rem;
+  margin-left: 1rem;
+}
+
+/* Pinned post highlight */
+.community-forum .pinned-post {
+  background-color: #fff9e6;
+}
+
+/* Answered question indicator */
+.community-forum .answered-question {
+  border-left-color: #28a745 !important;
+}
+
+/* Faculty badge colors */
+.community-forum .badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.community-forum .badge.bg-primary {
+  background-color: #007bff !important;
+}
+
+.community-forum .badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* Loading and empty states */
+.community-forum .loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.community-forum .empty-state {
+  text-align: center;
+  padding: 3rem 0;
+  color: #6c757d;
+}
+
+/* Modal improvements */
+.community-forum .modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .community-forum .ms-4 {
+    margin-left: 1rem !important;
+  }
+  
+  .community-forum .d-flex.gap-3 {
+    flex-wrap: wrap;
+  }
+  
+  .community-forum .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* Animation for new posts */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.community-forum .card {
+  animation: fadeIn 0.3s ease-in;
+}
